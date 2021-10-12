@@ -5,7 +5,15 @@ import { Photo } from './types/Photo';
 import { PhotoItem } from './components/PhotoItem';
 import { FaReact } from 'react-icons/fa';
 import { AiOutlineCopyrightCircle } from 'react-icons/ai'
+import PhotoModal from './components/PhotoModal';
 
+export interface IModalInfo {
+  isOpen: boolean;
+  currentPhoto: {
+    url: string,
+    name: string
+  };
+}
 
 const App = () => {
 
@@ -48,8 +56,14 @@ const App = () => {
     setLoading(false);
   }
 
+  const [currentModalInfo, setCurrentModalInfo] = useState<IModalInfo>({ isOpen: false, currentPhoto: { name: '', url: ''} });
+
   return (
     <C.Container>
+      <PhotoModal
+        currentModalInfo={currentModalInfo}
+        setCurrentModalInfo={setCurrentModalInfo}
+      />
       <C.Area>
          <C.Header>iPhoto Gallery</C.Header>
 
@@ -70,10 +84,11 @@ const App = () => {
             <C.PhotoList>
                {photos.map((item, index)=>(
                  <PhotoItem 
-                 key={index} 
-                 url={item.url} 
-                 name={item.name}
-                 onDelete={handleDeleteClick}
+                  key={index} 
+                  url={item.url} 
+                  name={item.name}
+                  onDelete={handleDeleteClick}
+                  setCurrentModalInfo={setCurrentModalInfo}
                  />
                ))}
             </C.PhotoList>
